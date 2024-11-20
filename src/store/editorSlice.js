@@ -20,7 +20,6 @@ const editorSlice = createSlice({
       state.codes[language] = code;
     },
     resetCode: (state) => {
-      // Seçili dilin kodunu sıfırla (başlangıç değerine dön)
       state.codes[state.language] = initialState.codes[state.language];
     },
   },
