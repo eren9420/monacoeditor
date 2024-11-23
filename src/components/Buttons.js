@@ -3,52 +3,58 @@ import { useSelector, useDispatch } from "react-redux";
 import { resetCode } from "../store/editorSlice";
 import { createSubmission, getSubmissionResult } from "../api/judge0";
 
-const Buttons = () => {
-  const code = useSelector((state) => state.editor.codes[state.editor.language]);
-  const language = useSelector((state) => state.editor.language);
+const Buttons = ({ setOutput }) => {
   const dispatch = useDispatch();
+  const [isRunning, setIsRunning] = useState(false); 
+  const code = useSelector((state) => state.editor.codes[state.editor.language]); 
+  const language = useSelector((state) => state.editor.language);
 
-  const [output, setOutput] = useState(""); 
-  const [loading, setLoading] = useState(false); 
-  const [copyText, setCopyText] = useState("Copy"); 
 
-  const languageMap = {
+  const languageIds = {
     javascript: 63,
     java: 62,
-    
   };
 
-  
   const handleReset = () => {
     dispatch(resetCode()); 
-    setOutput(""); 
+    setOutput("Output will appear here..."); 
   };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(code).then(() => {
-      setCopyText("Copied!"); 
-      setTimeout(() => setCopyText("Copy"), 3000); 
+      alert("Code copied to clipboard!");
     });
   };
 
   const handleRun = async () => {
-    setLoading(true);
-    setOutput(""); 
+    if (isRunning) return; 
+    setIsRunning(true);
+    setOutput("Running...");
 
     try {
-      const token = await createSubmission(
-        code,
-        languageMap[language],
-        "" 
-      );
+      const languageId = languageIds[language];
+      if (!languageId) {
+        throw new Error("Unsupported language selected.");
+      }
+
+     
+      const token = await createSubmission(code, languageId);
 
       const result = await getSubmissionResult(token);
 
-      setOutput(result.stdout || result.stderr || "No output");
+      if (result.stdout) {
+        setOutput(result.stdout);
+      } else if (result.stderr) {
+        setOutput(`Error: ${result.stderr}`);
+      } else if (result.compile_output) {
+        setOutput(`Compile Error: ${result.compile_output}`);
+      } else {
+        setOutput("No output received.");
+      }
     } catch (error) {
-      setOutput("An error occurred while running the code.");
+      setOutput(`Error: ${error.message}`);
     } finally {
-      setLoading(false);
+      setIsRunning(false);
     }
   };
 
@@ -57,18 +63,12 @@ const Buttons = () => {
       <button className="reset-button" onClick={handleReset}>
         Reset to Initial Code
       </button>
-
       <button className="copy-button" onClick={handleCopy}>
-        {copyText}
+        Copy
       </button>
-
-      <button className="run-button" onClick={handleRun} disabled={loading}>
-        {loading ? "Running..." : "Run"}
+      <button className="run-button" onClick={handleRun} disabled={isRunning}>
+        {isRunning ? "Running..." : "Run"}
       </button>
-
-      <div className="output-container">
-        <pre>{output}</pre>
-      </div>
     </div>
   );
 };
