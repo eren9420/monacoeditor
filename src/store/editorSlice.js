@@ -1,7 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  language: 'javascript',
+  language: "javascript",
   codes: {
     javascript: `var returnmax = function(nums) {\n  // Insert your code here\n};`,
     java: `class Solution {\n  public int returnmax(int[] nums) {\n    // Insert your code here\n  }\n}`,
@@ -9,17 +9,17 @@ const initialState = {
 };
 
 const editorSlice = createSlice({
-  name: 'editor',
+  name: "editor",
   initialState,
   reducers: {
-    setLanguage: (state, action) => {
+    setLanguage(state, action) {
       state.language = action.payload;
     },
-    updateCode: (state, action) => {
+    updateCode(state, action) {
       const { language, code } = action.payload;
       state.codes[language] = code;
     },
-    resetCode: (state) => {
+    resetCode(state) {
       state.codes[state.language] = initialState.codes[state.language];
     },
   },

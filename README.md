@@ -17,8 +17,35 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 To get started, clone the repository and install dependencies:
 
 ```bash
-git clone https://github.com/your-username/online-code-editor.git
+git clone https://github.com/eren9420/monacoeditor.git
 cd online-code-editor
 npm install
 npm start
+
+Now open http://localhost:3000 to view the app in your browser.
+
+
+```FOLDER STRUCTURE
+
+.
+├── public/                 
+├── src/                   
+│   ├── components/         
+│   │   ├── Buttons.js     
+│   │   ├── CodeEditor.js   
+│   │   ├── Dropdown.js     
+│   │   └── Output.js       
+│   ├── store/              
+│   │   ├── editorSlice.js  
+│   │   └── index.js       
+│   ├── utils/              
+│   │   └── api.js          
+│   ├── App.js              
+│   ├── App.css             
+│   ├── index.js            
+│   └── index.css          
+├── .env                    
+├── package.json            
+├── README.md               
+└── .gitignore              
 
