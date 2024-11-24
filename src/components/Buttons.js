@@ -6,9 +6,9 @@ import { createSubmission, getSubmissionResult } from "../api/judge0";
 const Buttons = ({ setOutput }) => {
   const dispatch = useDispatch();
   const [isRunning, setIsRunning] = useState(false); 
+  const [copyButtonText, setCopyButtonText] = useState("Copy"); 
   const code = useSelector((state) => state.editor.codes[state.editor.language]); 
   const language = useSelector((state) => state.editor.language);
-
 
   const languageIds = {
     javascript: 63,
@@ -22,7 +22,10 @@ const Buttons = ({ setOutput }) => {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(code).then(() => {
-      alert("Code copied to clipboard!");
+      setCopyButtonText("Copied!"); 
+      setTimeout(() => {
+        setCopyButtonText("Copy");
+      }, 3000);
     });
   };
 
@@ -37,7 +40,6 @@ const Buttons = ({ setOutput }) => {
         throw new Error("Unsupported language selected.");
       }
 
-     
       const token = await createSubmission(code, languageId);
 
       const result = await getSubmissionResult(token);
@@ -64,7 +66,7 @@ const Buttons = ({ setOutput }) => {
         Reset to Initial Code
       </button>
       <button className="copy-button" onClick={handleCopy}>
-        Copy
+        {copyButtonText} 
       </button>
       <button className="run-button" onClick={handleRun} disabled={isRunning}>
         {isRunning ? "Running..." : "Run"}

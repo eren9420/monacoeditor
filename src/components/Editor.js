@@ -4,25 +4,24 @@ import { updateCode } from '../store/editorSlice';
 import { Editor } from '@monaco-editor/react';
 
 const CodeEditor = () => {
-  const editorRef = useRef(null); // Editor'ü referansla kontrol etmek için
+  const editorRef = useRef(null); 
   const dispatch = useDispatch();
 
   const language = useSelector((state) => state.editor.language);
-  const code = useSelector((state) => state.editor.codes[language]); // O anki dilin kodunu al
+  const code = useSelector((state) => state.editor.codes[language]); 
 
   const handleCodeChange = (newCode) => {
     if (newCode !== null) {
-      dispatch(updateCode({ language, code: newCode })); // O anki dilin kodunu güncelle
+      dispatch(updateCode({ language, code: newCode }));
     }
   };
 
   const handleEditorDidMount = (editor) => {
-    editorRef.current = editor; // Editor'ü referansa bağla
+    editorRef.current = editor; 
   };
 
   useEffect(() => {
     if (editorRef.current) {
-      // Editor boyutlandırması veya diğer ayarlarla ilgili bir işlem gerekirse buraya eklenebilir
       editorRef.current.layout();
     }
   }, [language]);
@@ -36,12 +35,12 @@ const CodeEditor = () => {
   theme="vs-dark"
   onMount={(editor) => {
     editorRef.current = editor;
-    // Trigger layout manually after mounting
+    
     setTimeout(() => editor.layout(), 0);
   }}
   options={{
     fontSize: 16,
-    automaticLayout: false, // Disable automatic layout
+    automaticLayout: false, 
     minimap: { enabled: false },
   }}
 />

@@ -3,7 +3,7 @@ import editorReducer from './editorSlice';
 
 const store = configureStore({
   reducer: {
-    editor: editorReducer, // editor için oluşturulmuş slice
+    editor: editorReducer,
   },
 });
 
