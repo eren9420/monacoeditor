@@ -4,11 +4,12 @@ import { updateCode } from '../store/editorSlice';
 import { Editor } from '@monaco-editor/react';
 
 const CodeEditor = () => {
-  const editorRef = useRef(null); 
+  const editorRef = useRef(null);
+  const containerRef = useRef(null);
   const dispatch = useDispatch();
 
   const language = useSelector((state) => state.editor.language);
-  const code = useSelector((state) => state.editor.codes[language]); 
+  const code = useSelector((state) => state.editor.codes[language]);
 
   const handleCodeChange = (newCode) => {
     if (newCode !== null) {
@@ -17,34 +18,38 @@ const CodeEditor = () => {
   };
 
   const handleEditorDidMount = (editor) => {
-    editorRef.current = editor; 
+    editorRef.current = editor;
   };
 
   useEffect(() => {
-    if (editorRef.current) {
-      editorRef.current.layout();
+    const resizeObserver = new ResizeObserver(() => {
+      if (editorRef.current) {
+        editorRef.current.layout(); 
+      }
+    });
+
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
     }
-  }, [language]);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
 
   return (
-    <div className="editor-container">
+    <div className="editor-container" ref={containerRef}>
       <Editor
-  language={language}
-  value={code}
-  onChange={handleCodeChange}
-  theme="vs-dark"
-  onMount={(editor) => {
-    editorRef.current = editor;
-    
-    setTimeout(() => editor.layout(), 0);
-  }}
-  options={{
-    fontSize: 16,
-    automaticLayout: false, 
-    minimap: { enabled: false },
-  }}
-/>
-
+        language={language}
+        value={code}
+        onChange={handleCodeChange}
+        theme="vs-dark"
+        onMount={handleEditorDidMount}
+        options={{
+          fontSize: 16,
+          minimap: { enabled: false },
+        }}
+      />
     </div>
   );
 };
