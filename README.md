@@ -34,7 +34,6 @@ Now open http://localhost:3000 to view the app in your browser.
 │   │   ├── Buttons.js     
 │   │   ├── CodeEditor.js   
 │   │   ├── Dropdown.js     
-│   │   └── Output.js       
 │   ├── store/              
 │   │   ├── editorSlice.js  
 │   │   └── index.js       
