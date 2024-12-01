@@ -65,6 +65,9 @@ const Buttons = ({ setOutput }) => {
       <button className="reset-button" onClick={handleReset}>
         Reset
       </button>
+      <button className="reset-button" onClick={handleReset}>
+        Reset
+      </button>
       <button className="copy-button" onClick={handleCopy}>
         {copyButtonText} 
       </button>
